@@ -46,7 +46,7 @@ if get_gsc_file is not None:
 
     for index, row in df.iterrows():
       keyword = row['Query più frequenti']
-      pytrends = TrendReq(hl='en-US', tz=360)
+      pytrends = TrendReq(hl='en-US', tz=360, timeout=(10,25), proxies=['https://34.203.233.13:80',], retries=2, backoff_factor=0.1, requests_args={'verify':False})
       kw_list = [keyword]
       pytrends.build_payload(kw_list, cat=0, timeframe=timeframe, geo=geo, gprop='')
       df2 = pytrends.interest_over_time()
