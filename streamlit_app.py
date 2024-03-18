@@ -15,6 +15,8 @@ st.write("""
 </ol>
 """, unsafe_allow_html=True)
 
+st.markdown("---")
+
 sortby = st.selectbox('Sort Keywords By',('Clic', 'Impressioni','CTR','Posizione'))
 cutoff = st.number_input('Number of queries', min_value=1, max_value=200, value=10)
 pause = st.number_input('Pause between calls', min_value=1, max_value=5, value=2)
