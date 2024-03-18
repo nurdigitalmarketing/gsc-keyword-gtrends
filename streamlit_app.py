@@ -6,20 +6,12 @@ import time
 import base64
 from pytrends.request import TrendReq
 
-st.markdown("""
-<style>
-.big-font {
-    font-size:40px !important;
-}
-</style>
-""", unsafe_allow_html=True)
+st.title("Google Trends For Top GSC Keywords")
 
-
-st.markdown("""
-<p class="big-font">Google Trends For Top GSC Keywords</p>
+st.write("""
 <b>Directions: </b></ br><ol>
 <li>Esporta i dati dal report sul rendimento (impressioni, CTR, posizione) in Google Search Console. Caricare poi il file Queries.csv dal file zip.</li>
-<li>Max number of queries to run is capped to 200 to prevent timeout of the app or being blocked by Google</li>
+<li>Il numero massimo di query da eseguire è limitato a 200 per evitare il timeout dell'applicazione o il blocco da parte di Google.</li>
 </ol>
 """, unsafe_allow_html=True)
 
