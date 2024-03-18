@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import json
-import requests
-import time
 import base64
 from pytrends.request import TrendReq
+from pytrends.exceptions import TooManyRequestsError
+import time
 
 st.title("Google Trends For Top GSC Keywords")
 
@@ -18,7 +17,7 @@ st.markdown("---")
 
 sortby = st.selectbox('Ordina keyword per',('Clic', 'Impressioni','CTR','Posizione'))
 cutoff = st.number_input('Numero di queries', min_value=1, max_value=200, value=10)
-pause = st.number_input('Pausa tra le chiamate', min_value=1, max_value=5, value=2)
+pause = st.number_input('Pausa tra le chiamate', min_value=1, max_value=60, value=30)  # Aumentato il limite massimo
 timeframe = st.selectbox('Timeframe',('today 1-m', 'today 3-m', 'today 12-m'))
 geo = st.selectbox('Geo',('World', 'US'))
 
@@ -44,47 +43,62 @@ if get_gsc_file is not None:
     flat =0
     na = 0
 
-    for index, row in df.iterrows():
-      keyword = row['Query più frequenti']
-      pytrends = TrendReq(hl='en-US', tz=360)
-      kw_list = [keyword]
-      pytrends.build_payload(kw_list, cat=0, timeframe=timeframe, geo=geo, gprop='')
-      df2 = pytrends.interest_over_time()
-      keywords.append(keyword)
-      try:
+    def fetch_trends_with_retry(keyword, pytrends, attempts=5, sleep_duration=60):
+        for attempt in range(attempts):
+            try:
+                pytrends.build_payload([keyword], cat=0, timeframe=timeframe, geo=geo, gprop='')
+                return pytrends.interest_over_time()
+            except TooManyRequestsError:
+                if attempt < attempts - 1:
+                    time.sleep(sleep_duration)  # Aumenta la pausa per evitare il blocco
+                    continue
+                else:
+                    return pd.DataFrame()  # Restituisce un DataFrame vuoto in caso di fallimento
+        return pd.DataFrame()  # Precauzione
 
-        trend1 = int((df2[keyword][-5] + df2[keyword][-4] + df2[keyword][-3])/3)
-        trend2 = int((df2[keyword][-4] + df2[keyword][-3] + df2[keyword][-2])/3)
-        trend3 = int((df2[keyword][-3] + df2[keyword][-2] + df2[keyword][-1])/3)
+    pytrends = TrendReq(hl='en-US', tz=360)
+    
+    for keyword in df['Query più frequenti'].head(cutoff):
+        df2 = fetch_trends_with_retry(keyword, pytrends, attempts=3, sleep_duration=pause)
+        if not df2.empty:
+            # Il tuo codice per elaborare i dati e aggiornare df3
+            keywords.append(keyword)
+            try:
+                trend1 = int((df2[keyword][-5] + df2[keyword][-4] + df2[keyword][-3])/3)
+                trend2 = int((df2[keyword][-4] + df2[keyword][-3] + df2[keyword][-2])/3)
+                trend3 = int((df2[keyword][-3] + df2[keyword][-2] + df2[keyword][-1])/3)
 
-        if trend3 > trend2 and trend2 > trend1:
-          trends.append('UP')
-          up+=1
-        elif trend3 < trend2 and trend2 < trend1:
-          trends.append('DOWN')
-          down+=1
+                if trend3 > trend2 and trend2 > trend1:
+                    trends.append('UP')
+                    up+=1
+                elif trend3 < trend2 and trend2 < trend1:
+                    trends.append('DOWN')
+                    down+=1
+                else:
+                    print(keyword + " is flat")
+                    trends.append('FLAT')
+                    flat+=1
+            except:
+                trends.append('N/A')
+                na+=1
         else:
-          print(keyword + " is flat")
-          trends.append('FLAT')
-          flat+=1
-      except:
-        trends.append('N/A')
-        na+=1
-      time.sleep(pause)
+            keywords.append(keyword)
+            trends.append('N/A')
+            na+=1
+        time.sleep(pause)
       
     df3['Keyword'] = keywords
     df3['Trend'] = trends
     df3[sortby] = metric
     
     def colortable(val):
+        color = 'white'
         if val == 'DOWN':
             color="lightcoral"
         elif val == 'UP':
             color = "lightgreen"
         elif val == 'FLAT':
             color = "lightblue"
-        else:
-            color = 'white'
         return 'background-color: %s' % color
 
     df3 = df3.style.applymap(colortable)
