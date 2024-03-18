@@ -10,7 +10,7 @@ st.title("Google Trends For Top GSC Keywords")
 
 st.markdown("""
 **Istruzioni:**
-1. Esporta i dati dal [report sul rendimento](https://search.google.com/search-console/performance/search-analytics) (impressioni, CTR, posizione) in Google Search Console. Carica poi il file Queries.csv dal file zip.
+1. Esporta i dati dal [report sul rendimento](https://search.google.com/search-console/performance/search-analytics) (impressioni, CTR, posizione) in Google Search Console. Carica poi il file `Queries.csv` dal file zip.
 2. Il numero massimo di query da eseguire è limitato a 200 per evitare il timeout dell'applicazione o il blocco da parte di Google.
 """)
 
