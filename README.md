@@ -1,5 +1,5 @@
 
-# Google Trends for Top GSC Keywords Automator v.1
+# Google Trends for Top GSC Keywords
 
 ## 👉🏼 Description
 This Streamlit tool was developed to integrate Google Trends analysis with Google Search Console (GSC) performance data, enabling users to visualize trends for their top-performing GSC keywords. By leveraging Google's Trend API through the `pytrends` library, this application processes up to 200 keywords, comparing their performance over specified timeframes and geographical settings. This unique approach provides valuable insights into keyword popularity trends, aiding in strategic decision-making for SEO and content marketing.
