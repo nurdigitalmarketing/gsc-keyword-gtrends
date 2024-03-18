@@ -29,25 +29,9 @@ cutoff = st.number_input('Number of queries', min_value=1, max_value=200, value=
 import time
 from pytrends.exceptions import TooManyRequestsError
 
-# Aumenta la pausa in modo esponenziale in caso di errore
-pause = 2  # Valore iniziale della pausa
-max_attempts = 5  # Numero massimo di tentativi per ogni query
-
-for index, row in df.iterrows():
-    attempts = 0
-    while attempts < max_attempts:
-        try:
-            # Esegui la query a Google Trends qui
-            break  # Uscita dal ciclo se la query ha successo
-        except TooManyRequestsError:
-            print(f"Too many requests, waiting {pause} seconds.")
-            time.sleep(pause)
-            pause *= 2  # Raddoppia la pausa ad ogni tentativo
-            attempts += 1
-    if attempts == max_attempts:
-        print("Failed to fetch data for keyword after maximum attempts.")
-        # Gestisci il caso in cui il numero massimo di tentativi è stato raggiunto
-
+sortby = st.selectbox('Sort Keywords By',('Clic', 'Impressioni','CTR','Posizione'))
+cutoff = st.number_input('Number of queries', min_value=1, max_value=200, value=10)
+pause = st.number_input('Pause between calls', min_value=1, max_value=5, value=2)
 timeframe = st.selectbox('Timeframe',('today 1-m', 'today 3-m', 'today 12-m'))
 geo = st.selectbox('Geo',('World', 'US'))
 
