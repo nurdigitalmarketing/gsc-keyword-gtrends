@@ -26,11 +26,6 @@ st.markdown("""
 
 sortby = st.selectbox('Sort Keywords By',('Clic', 'Impressioni','CTR','Posizione'))
 cutoff = st.number_input('Number of queries', min_value=1, max_value=200, value=10)
-import time
-from pytrends.exceptions import TooManyRequestsError
-
-sortby = st.selectbox('Sort Keywords By',('Clic', 'Impressioni','CTR','Posizione'))
-cutoff = st.number_input('Number of queries', min_value=1, max_value=200, value=10)
 pause = st.number_input('Pause between calls', min_value=1, max_value=5, value=2)
 timeframe = st.selectbox('Timeframe',('today 1-m', 'today 3-m', 'today 12-m'))
 geo = st.selectbox('Geo',('World', 'US'))
