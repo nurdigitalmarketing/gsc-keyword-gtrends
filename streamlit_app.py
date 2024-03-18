@@ -8,12 +8,11 @@ from pytrends.request import TrendReq
 
 st.title("Google Trends For Top GSC Keywords")
 
-st.write("""
-<b>Istruzioni: </b><ol>
-<li>Esporta i dati dal report sul rendimento (impressioni, CTR, posizione) in Google Search Console. Caricare poi il file Queries.csv dal file zip.</li>
-<li>Il numero massimo di query da eseguire è limitato a 200 per evitare il timeout dell'applicazione o il blocco da parte di Google.</li>
-</ol>
-""", unsafe_allow_html=True)
+st.markdown("""
+**Istruzioni:**
+1. Esporta i dati dal report sul rendimento (impressioni, CTR, posizione) in Google Search Console. Carica poi il file Queries.csv dal file zip.
+2. Il numero massimo di query da eseguire è limitato a 200 per evitare il timeout dell'applicazione o il blocco da parte di Google.
+""")
 
 st.markdown("---")
 
