@@ -20,7 +20,10 @@ sortby = st.selectbox('Ordina keyword per',('Clic', 'Impressioni','CTR','Posizio
 cutoff = st.number_input('Numero di queries', min_value=1, max_value=200, value=10)
 pause = st.number_input('Pausa tra le chiamate', min_value=1, max_value=5, value=2)
 timeframe = st.selectbox('Timeframe',('today 1-m', 'today 3-m', 'today 12-m'))
-geo = st.selectbox('Localizzazione',('IT', 'US'))
+geo = st.selectbox('Geo',('World', 'US'))
+
+if geo == 'World':
+    geo = ''
 
 get_gsc_file = st.file_uploader("Carica il file CSV di GSC",type=['csv'])  
 
@@ -43,7 +46,7 @@ if get_gsc_file is not None:
 
     for index, row in df.iterrows():
       keyword = row['Query più frequenti']
-      pytrend = TrendReq(hl='en-US', tz=360)
+      pytrends = TrendReq(hl='en-US', tz=360)
       kw_list = [keyword]
       pytrends.build_payload(kw_list, cat=0, timeframe=timeframe, geo=geo, gprop='')
       df2 = pytrends.interest_over_time()
