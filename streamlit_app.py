@@ -18,9 +18,8 @@ st.markdown("""
 st.markdown("""
 <p class="big-font">Google Trends For Top GSC Keywords</p>
 <b>Directions: </b></ br><ol>
-<li>Export Performance data (impressions, CTR, positon) in Google Search Console. Upload Queries.csv from the zip file.</li>
+<li>Esporta i dati dal report sul rendimento (impressioni, CTR, posizione) in Google Search Console. Caricare poi il file Queries.csv dal file zip.</li>
 <li>Max number of queries to run is capped to 200 to prevent timeout of the app or being blocked by Google</li>
-<li>Tutorial coming soon!</li>
 </ol>
 """, unsafe_allow_html=True)
 
@@ -33,10 +32,10 @@ geo = st.selectbox('Geo',('World', 'US'))
 if geo == 'World':
     geo = ''
 
-get_gsc_file = st.file_uploader("Upload GSC CSV File",type=['csv'])  
+get_gsc_file = st.file_uploader("Carica il file CSV di GSC",type=['csv'])  
 
 if get_gsc_file is not None:
-    st.write("Data upload success, processing... patience :sunglasses:")
+    st.write("Caricamento dei dati riuscito, elaborazione... :sunglasses:")
     
     df = pd.read_csv(get_gsc_file, encoding='utf-8')
     df.sort_values(by=[sortby], ascending=False, inplace=True)
@@ -100,7 +99,7 @@ if get_gsc_file is not None:
     def get_csv_download_link(df, title):
         csv = df.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
-        return f'<a href="data:file/csv;base64,{b64}" download="{title}">Download CSV File</a>'
+        return f'<a href="data:file/csv;base64,{b64}" download="{title}">Scarica il file CSV</a>'
     
     total = len(trends)
     st.write("Up: " + str(up) + " | " + str(round((up/total)*100,0)) + "%")
